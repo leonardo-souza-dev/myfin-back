@@ -6,6 +6,7 @@ namespace Ecommerce.Domain.Models
 {
     public class Tarefa
     {
+        public int Id { get; private set; }
         public string Descricao { get; private set; }
         public DateTime Data { get; private set; }
         public string DiaDaSemana
@@ -18,6 +19,7 @@ namespace Ecommerce.Domain.Models
 
         public Tarefa(int id, string descricao, string data)
         {
+            this.Id = id;
             this.Descricao = descricao;
             var ano = Convert.ToInt32(data.Split('-')[0]);
             var mes = Convert.ToInt32(data.Split('-')[1]);
@@ -27,6 +29,7 @@ namespace Ecommerce.Domain.Models
 
         public Tarefa(int id, string descricao, int ano, int mes, int dia, int hora, int minuto)
         {
+            this.Id = id;
             this.Descricao = descricao;
             this.Data = new DateTime(ano, mes, dia, hora, minuto, 0);
         }
@@ -39,6 +42,7 @@ namespace Ecommerce.Domain.Models
 
         public Tarefa(int id, string descricao, DateTime data)
         {
+            this.Id = id;
             this.Descricao = descricao;
             this.Data = data;
         }

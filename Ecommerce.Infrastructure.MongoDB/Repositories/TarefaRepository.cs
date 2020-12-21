@@ -46,11 +46,28 @@ namespace Ecommerce.Infrastructure.Sqlite
             return tarefas;
         }
 
-        public bool Criar(Tarefa tarefa)
+        public bool Inserir(Tarefa tarefa)
         {
             _con.Open();
             var query = $"INSERT OR REPLACE INTO Tarefas(Descricao, Ano, Mes, Dia, Hora, Minuto) " +
                 $" VALUES ('{tarefa.Descricao}', {tarefa.Data.Year}, {tarefa.Data.Month}, {tarefa.Data.Day}, 0,0)";
+            var cmd = new SQLiteCommand(query, _con);
+            cmd.ExecuteNonQuery();
+            _con.Close();
+
+            return true;
+        }
+
+        public bool Atualizar(Tarefa tarefa)
+        {
+            _con.Open();
+            var query = $"UPDATE Tarefas SET Descricao = '{tarefa.Descricao}', " +
+                $" Ano = {tarefa.Data.Year}, " +
+                $" Mes = {tarefa.Data.Month}, " +
+                $" Dia = {tarefa.Data.Day}, " +
+                $" Hora = 0, " +
+                $" Minuto = 0 " +
+                $" WHERE Id = {tarefa.Id} ";
             var cmd = new SQLiteCommand(query, _con);
             cmd.ExecuteNonQuery();
             _con.Close();

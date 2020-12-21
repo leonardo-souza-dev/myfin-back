@@ -17,17 +17,25 @@ namespace Ecommerce.Api.Controllers
             _tarefaService = tarefaService;
         }
 
-        [HttpGet("/obter")]
+        [HttpGet("/obter-semana")]
         public Semana ObterSemana(DateTime primeiroDia)
         {
-            //return new DiaTarefas("seg", _tarefas);
-            return _tarefaService.ObterSemana(primeiroDia);
+            var semana = _tarefaService.ObterSemana(primeiroDia);
+            return semana;
         }
 
         [HttpPut("/criar")]
-        public bool Inserir([FromBody]CriarTarefaRequest request)
+        public bool Criar([FromBody] TarefaRequest request)
         {
             _tarefaService.Inserir(new Tarefa(request.Descricao, request.Data));
+
+            return true;
+        }
+
+        [HttpPost("/alterar")]
+        public bool Alterar([FromBody] TarefaRequest request)
+        {
+            _tarefaService.Atualizar(new Tarefa(request.Id, request.Descricao, request.Data));
 
             return true;
         }

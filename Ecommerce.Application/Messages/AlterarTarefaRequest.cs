@@ -2,9 +2,9 @@
 
 namespace Ecommerce.Application.Messages
 {
-    public class CriarTarefaRequest
+    public class AlterarTarefaRequest
     {
-        public string Descricao { get; set; }
+        public int Id { get; set; }
         public DateTime Data { get; set; }
     }
 }

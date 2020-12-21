@@ -8,5 +8,6 @@ namespace Ecommerce.Domain.Interfaces
     {
         Semana ObterSemana(DateTime primeiroDia);
         bool Inserir(Tarefa tarefa);
+        bool Atualizar(Tarefa tarefa);
     }
 }

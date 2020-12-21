@@ -31,7 +31,12 @@ namespace Ecommerce.Application.Impl
 
         public bool Inserir(Tarefa tarefa)
         {
-            return _tarefaRepository.Criar(tarefa);
+            return _tarefaRepository.Inserir(tarefa);
+        }
+
+        public bool Atualizar(Tarefa tarefa)
+        {
+            return _tarefaRepository.Atualizar(tarefa);
         }
     }
 }
