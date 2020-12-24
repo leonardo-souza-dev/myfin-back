@@ -35,7 +35,7 @@ namespace Ecommerce.Api.Controllers
         [HttpPost("/alterar")]
         public bool Alterar([FromBody] TarefaRequest request)
         {
-            _tarefaService.Atualizar(new Tarefa(request.Id, request.Descricao, request.Data));
+            _tarefaService.Atualizar(new Tarefa(request.Id, request.Descricao, request.Data, request.Pontos));
 
             return true;
         }

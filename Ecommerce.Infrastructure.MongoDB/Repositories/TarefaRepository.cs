@@ -35,7 +35,9 @@ namespace Ecommerce.Infrastructure.Sqlite
                     var diaRead = rdr.GetInt32(4);
                     var horaRead = rdr.GetInt32(5);
                     var minutoRead = rdr.GetInt32(6);
-                    Tarefa tarefa = new Tarefa(id, descricao, anoRead, mesRead, diaRead, horaRead, minutoRead);
+                    var pontosRead = rdr.GetInt32(7);
+
+                    Tarefa tarefa = new Tarefa(id, descricao, anoRead, mesRead, diaRead, horaRead, minutoRead, pontosRead);
 
                     tarefas.Add(tarefa);
                 }
@@ -49,8 +51,8 @@ namespace Ecommerce.Infrastructure.Sqlite
         public bool Inserir(Tarefa tarefa)
         {
             _con.Open();
-            var query = $"INSERT OR REPLACE INTO Tarefas(Descricao, Ano, Mes, Dia, Hora, Minuto) " +
-                $" VALUES ('{tarefa.Descricao}', {tarefa.Data.Year}, {tarefa.Data.Month}, {tarefa.Data.Day}, 0,0)";
+            var query = $"INSERT OR REPLACE INTO Tarefas(Descricao, Ano, Mes, Dia, Hora, Minuto, Pontos) " +
+                $" VALUES ('{tarefa.Descricao}', {tarefa.Data.Year}, {tarefa.Data.Month}, {tarefa.Data.Day}, 0,0, {tarefa.Pontos})";
             var cmd = new SQLiteCommand(query, _con);
             cmd.ExecuteNonQuery();
             _con.Close();
@@ -66,7 +68,8 @@ namespace Ecommerce.Infrastructure.Sqlite
                 $" Mes = {tarefa.Data.Month}, " +
                 $" Dia = {tarefa.Data.Day}, " +
                 $" Hora = 0, " +
-                $" Minuto = 0 " +
+                $" Minuto = 0, " +
+                $" Pontos = {tarefa.Pontos} " +
                 $" WHERE Id = {tarefa.Id} ";
             var cmd = new SQLiteCommand(query, _con);
             cmd.ExecuteNonQuery();
