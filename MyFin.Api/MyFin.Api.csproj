@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'MyFin.Api' " />
+  <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
+    <PackageReference Include="Swashbuckle" Version="5.6.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MyFin.Application.Impl\MyFin.Application.Impl.csproj" />
+    <ProjectReference Include="..\MyFin.Application\MyFin.Application.csproj" />
+    <ProjectReference Include="..\MyFin.Domain\MyFin.Domain.csproj" />
+    <ProjectReference Include="..\MyFin.Infra.Sqlite\MyFin.Infra.Sqlite.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
+  </ItemGroup>
+
+
+</Project>

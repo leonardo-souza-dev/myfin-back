@@ -1,0 +1,81 @@
+﻿using System.Collections.Generic;
+using MyFin.Domain.Models;
+using MyFin.Domain.Repositories;
+using System.IO;
+using System.Data.SQLite;
+
+namespace MyFin.Infra.Sqlite
+{
+    public class TarefaRepository : ITarefaRepository
+    {
+        private SQLiteConnection _con;
+
+        public TarefaRepository()
+        {
+            var pastaAtual = Directory.GetCurrentDirectory();
+            string cs = $"Data Source={pastaAtual}/tarefas.db";
+            _con = new SQLiteConnection(cs);            
+        }
+
+        public List<Tarefa> ObterTodas(int ano, int mes, int diaInicio, int diaFim)
+        {
+            List<Tarefa> tarefas = new List<Tarefa>();
+
+            _con.Open();
+            var query = $"SELECT * FROM TAREFAS WHERE Ano = {ano} AND MES = {mes} AND DIA BETWEEN {diaInicio} AND {diaFim} ";
+            var cmd = new SQLiteCommand(query, _con);
+            using (SQLiteDataReader rdr = cmd.ExecuteReader())
+            {
+                while (rdr.Read())
+                {
+                    var id = rdr.GetInt32(0);
+                    var descricao = rdr.GetString(1);
+                    var anoRead = rdr.GetInt32(2);
+                    var mesRead = rdr.GetInt32(3);
+                    var diaRead = rdr.GetInt32(4);
+                    var horaRead = rdr.GetInt32(5);
+                    var minutoRead = rdr.GetInt32(6);
+                    var pontosRead = rdr.GetInt32(7);
+
+                    Tarefa tarefa = new Tarefa(id, descricao, anoRead, mesRead, diaRead, horaRead, minutoRead, pontosRead);
+
+                    tarefas.Add(tarefa);
+                }
+            }
+
+            _con.Close();
+
+            return tarefas;
+        }
+
+        public bool Inserir(Tarefa tarefa)
+        {
+            _con.Open();
+            var query = $"INSERT OR REPLACE INTO Tarefas(Descricao, Ano, Mes, Dia, Hora, Minuto, Pontos) " +
+                $" VALUES ('{tarefa.Descricao}', {tarefa.Data.Year}, {tarefa.Data.Month}, {tarefa.Data.Day}, 0,0, {tarefa.Pontos})";
+            var cmd = new SQLiteCommand(query, _con);
+            cmd.ExecuteNonQuery();
+            _con.Close();
+
+            return true;
+        }
+
+        public bool Atualizar(Tarefa tarefa)
+        {
+            _con.Open();
+            var query = $"UPDATE Tarefas SET Descricao = '{tarefa.Descricao}', " +
+                $" Ano = {tarefa.Data.Year}, " +
+                $" Mes = {tarefa.Data.Month}, " +
+                $" Dia = {tarefa.Data.Day}, " +
+                $" Hora = 0, " +
+                $" Minuto = 0, " +
+                $" Pontos = {tarefa.Pontos} " +
+                $" WHERE Id = {tarefa.Id} ";
+            var cmd = new SQLiteCommand(query, _con);
+            cmd.ExecuteNonQuery();
+            _con.Close();
+
+            return true;
+        }
+    }
+}
