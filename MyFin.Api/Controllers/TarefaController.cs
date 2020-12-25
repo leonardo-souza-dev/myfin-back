@@ -25,19 +25,15 @@ namespace MyFin.Api.Controllers
         }
 
         [HttpPut("/criar")]
-        public bool Criar([FromBody] TarefaRequest request)
+        public Tarefa Criar([FromBody] TarefaRequest request)
         {
-            _tarefaService.Inserir(new Tarefa(request.Descricao, request.Data));
-
-            return true;
+            return _tarefaService.Inserir(new Tarefa(request.Descricao, request.Data, request.Pontos));
         }
 
         [HttpPost("/alterar")]
-        public bool Alterar([FromBody] TarefaRequest request)
+        public Tarefa Alterar([FromBody] TarefaRequest request)
         {
-            _tarefaService.Atualizar(new Tarefa(request.Id, request.Descricao, request.Data, request.Pontos));
-
-            return true;
+            return _tarefaService.Atualizar(new Tarefa(request.Id, request.Descricao, request.Data, request.Pontos));
         }
     }
 }

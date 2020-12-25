@@ -3,6 +3,7 @@ using MyFin.Domain.Models;
 using MyFin.Domain.Repositories;
 using System.IO;
 using System.Data.SQLite;
+using System;
 
 namespace MyFin.Infra.Sqlite
 {
@@ -48,19 +49,24 @@ namespace MyFin.Infra.Sqlite
             return tarefas;
         }
 
-        public bool Inserir(Tarefa tarefa)
+        public int Inserir(Tarefa tarefa)
         {
             _con.Open();
             var query = $"INSERT OR REPLACE INTO Tarefas(Descricao, Ano, Mes, Dia, Hora, Minuto, Pontos) " +
                 $" VALUES ('{tarefa.Descricao}', {tarefa.Data.Year}, {tarefa.Data.Month}, {tarefa.Data.Day}, 0,0, {tarefa.Pontos})";
             var cmd = new SQLiteCommand(query, _con);
             cmd.ExecuteNonQuery();
+
+            cmd.CommandText = "SELECT last_insert_rowid() ";
+
+            int ultimoId = Convert.ToInt32(cmd.ExecuteScalar());
+            
             _con.Close();
 
-            return true;
+            return ultimoId;
         }
 
-        public bool Atualizar(Tarefa tarefa)
+        public Tarefa Atualizar(Tarefa tarefa)
         {
             _con.Open();
             var query = $"UPDATE Tarefas SET Descricao = '{tarefa.Descricao}', " +
@@ -75,7 +81,7 @@ namespace MyFin.Infra.Sqlite
             cmd.ExecuteNonQuery();
             _con.Close();
 
-            return true;
+            return tarefa;
         }
     }
 }

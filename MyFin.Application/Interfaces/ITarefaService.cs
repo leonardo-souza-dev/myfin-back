@@ -7,7 +7,7 @@ namespace MyFin.Domain.Interfaces
     public interface ITarefaService
     {
         Semana ObterSemana(DateTime primeiroDia);
-        bool Inserir(Tarefa tarefa);
-        bool Atualizar(Tarefa tarefa);
+        Tarefa Inserir(Tarefa tarefa);
+        Tarefa Atualizar(Tarefa tarefa);
     }
 }

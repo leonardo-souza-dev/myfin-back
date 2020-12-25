@@ -29,12 +29,12 @@ namespace MyFin.Application.Impl
             return semana;
         }
 
-        public bool Inserir(Tarefa tarefa)
+        public Tarefa Inserir(Tarefa tarefa)
         {
-            return _tarefaRepository.Inserir(tarefa);
+            return new Tarefa(_tarefaRepository.Inserir(tarefa), tarefa.Descricao, tarefa.Data, tarefa.Pontos);
         }
 
-        public bool Atualizar(Tarefa tarefa)
+        public Tarefa Atualizar(Tarefa tarefa)
         {
             return _tarefaRepository.Atualizar(tarefa);
         }
