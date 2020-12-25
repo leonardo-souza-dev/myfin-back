@@ -28,12 +28,13 @@ namespace MyFin.Domain.Models
             var dia = Convert.ToInt32(data.Split('-')[2]);
             this.Data = new DateTime(ano, mes, dia);
         }
-        public Tarefa(int id, string descricao, DateTime data, int pontos)
+        public Tarefa(int id, string descricao, DateTime data, object pontos)
         {
             this.Id = id;
             this.Descricao = descricao;
             this.Data = data;
-            this.Pontos = pontos;
+            var pontosStr = pontos.ToString();
+            this.Pontos = int.Parse(pontosStr);
         }
 
         public Tarefa(int id, string descricao, int ano, int mes, int dia, int hora, int minuto, int pontos)
