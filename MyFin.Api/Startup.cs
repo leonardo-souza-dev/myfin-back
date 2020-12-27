@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using MyFin.Infra.Sqlite;
 
@@ -35,8 +34,8 @@ namespace MyFin.Api
 
 
             services.AddControllers();
-            services.AddSingleton<ITarefaService, TarefaService>();
-            services.AddSingleton<ITarefaRepository, TarefaRepository>();
+            services.AddTransient<ITarefaService, TarefaService>();
+            services.AddScoped<ITarefaRepository, TarefaRepository>();
 
             services.AddSwaggerGen(c => {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MyFin API", Version = "V1" });

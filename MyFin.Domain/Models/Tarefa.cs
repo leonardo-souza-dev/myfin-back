@@ -18,15 +18,14 @@ namespace MyFin.Domain.Models
             }
         }
 
-        public Tarefa(int id, string descricao, string data)
+        public Tarefa(int id, string descricao, int pontos, DateTime data)
         {
             this.Id = id;
             this.Descricao = descricao;
-            var ano = Convert.ToInt32(data.Split('-')[0]);
-            var mes = Convert.ToInt32(data.Split('-')[1]);
-            var dia = Convert.ToInt32(data.Split('-')[2]);
-            this.Data = new DateTime(ano, mes, dia);
+            this.Pontos = pontos;
+            this.Data = data;
         }
+
         public Tarefa(int id, string descricao, DateTime data, object pontos)
         {
             this.Id = id;

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace Utils
 {
@@ -29,31 +30,33 @@ namespace Utils
 
         public static int ObterNumeroDaSemana(DateTime data)
         {
-            data.AddHours(-data.Hour);
-            data.AddMinutes(-data.Minute);
-            data.AddSeconds(-data.Second);
-            data.AddMilliseconds(-data.Millisecond);
+            data = data.AddHours(-data.Hour);
+            data = data.AddMinutes(-data.Minute);
+            data = data.AddSeconds(-data.Second);
+            data = data.AddMilliseconds(-data.Millisecond);
 
-            var dateGetDate = data.Day;
-            var dateGetDay = (int)data.DayOfWeek;
-            var temp = dateGetDate + 3 - (dateGetDay + 6) % 7;
-            data = data.AddDays(-data.Day);
-            data = data.AddDays(temp);
+            var week1 = new DateTime(data.Year, 1, 1);
 
-            var week1 = new DateTime(data.Year, 1, 4);
+            var qtdMilisegundos1970ateData = GetTime(data);
+            var qtdMs1970ate1janDoAnoDaData = GetTime(week1);
+            var diffMsEntreDataEDia1janDoAnoDaData = qtdMilisegundos1970ateData - qtdMs1970ate1janDoAnoDaData;
+            var qtdDiasDiferencaEntreDataEDia1JanDoAnoDaData = diffMsEntreDataEDia1janDoAnoDaData / 86400000;
+            var diff2 = qtdDiasDiferencaEntreDataEDia1JanDoAnoDaData + 1;
+            var diaDaSemanaDoDia1JanDoAnoDaData = (int)week1.DayOfWeek;
 
-            var dateGetTime = GetTime(data);
-            var week1GetTime = GetTime(week1);
-            var diff1 = dateGetTime - week1GetTime;
-            var div1 = diff1 / 86400000;
-            var diff2 = div1 - 3;
-            var week1GetDay = (int)week1.DayOfWeek;
+            var d6 = diaDaSemanaDoDia1JanDoAnoDaData + 6;
+            var resto = d6 % 7;
 
-            decimal calc = (diff2 + (week1GetDay + 6) % 7) / 7;
+            decimal calc = (diff2 + resto) / 7;
 
             int numero = 1 + (int)Math.Round(calc, 0);
 
             return numero;
+        }
+
+        public static string ConverterDataSqlite(DateTime data)
+        {
+            return data.ToString("s", CultureInfo.CreateSpecificCulture("pt-BR")).Replace('T', ' ') + ".000";
         }
 
         private static long GetTime(DateTime dia)

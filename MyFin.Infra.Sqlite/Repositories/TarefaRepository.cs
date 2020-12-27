@@ -4,7 +4,7 @@ using MyFin.Domain.Repositories;
 using System.IO;
 using System.Data.SQLite;
 using System;
-using System.Globalization;
+using Utils;
 
 namespace MyFin.Infra.Sqlite
 {
@@ -22,12 +22,11 @@ namespace MyFin.Infra.Sqlite
         public List<Tarefa> ObterTodas(DateTime diaInicio, DateTime diaFim)
         {
             List<Tarefa> tarefas = new List<Tarefa>();
-            var cultura = CultureInfo.CreateSpecificCulture("pt-BR");
-            var diaInicioSqlite = diaInicio.ToString("s", cultura);
-            var diaFimSqlite = diaFim.ToString("s", cultura);
+            var diaInicioSqlite = Helper.ConverterDataSqlite(diaInicio);
+            var diaFimSqlite = Helper.ConverterDataSqlite(diaFim);
 
             _con.Open();
-            var query = $"SELECT * FROM TAREFAS WHERE Data BETWEEN '{diaInicioSqlite}.000' AND '{diaFimSqlite}.000'";
+            var query = $"SELECT * FROM TAREFAS WHERE Data BETWEEN '{diaInicioSqlite}' AND '{diaFimSqlite}'";
             var cmd = new SQLiteCommand(query, _con);
             using (SQLiteDataReader rdr = cmd.ExecuteReader())
             {
@@ -35,14 +34,10 @@ namespace MyFin.Infra.Sqlite
                 {
                     var id = rdr.GetInt32(0);
                     var descricao = rdr.GetString(1);
-                    var anoRead = rdr.GetInt32(2);
-                    var mesRead = rdr.GetInt32(3);
-                    var diaRead = rdr.GetInt32(4);
-                    var horaRead = rdr.GetInt32(5);
-                    var minutoRead = rdr.GetInt32(6);
-                    var pontosRead = rdr.GetInt32(7);
+                    var pontosRead = rdr.GetInt32(2);
+                    var dataRead = rdr.GetDateTime(3);
 
-                    Tarefa tarefa = new Tarefa(id, descricao, anoRead, mesRead, diaRead, horaRead, minutoRead, pontosRead);
+                    Tarefa tarefa = new Tarefa(id, descricao, pontosRead, dataRead);
 
                     tarefas.Add(tarefa);
                 }
@@ -56,8 +51,9 @@ namespace MyFin.Infra.Sqlite
         public int Inserir(Tarefa tarefa)
         {
             _con.Open();
-            var query = $"INSERT OR REPLACE INTO Tarefas(Descricao, Ano, Mes, Dia, Hora, Minuto, Pontos) " +
-                $" VALUES ('{tarefa.Descricao}', {tarefa.Data.Year}, {tarefa.Data.Month}, {tarefa.Data.Day}, 0,0, {tarefa.Pontos})";
+            var data = Helper.ConverterDataSqlite(tarefa.Data);
+            var query = $" INSERT OR REPLACE INTO Tarefas(Descricao, Pontos, Data) " +
+                        $" VALUES ('{tarefa.Descricao}', {tarefa.Pontos}, '{data}') ";
             var cmd = new SQLiteCommand(query, _con);
             cmd.ExecuteNonQuery();
 
@@ -74,12 +70,8 @@ namespace MyFin.Infra.Sqlite
         {
             _con.Open();
             var query = $"UPDATE Tarefas SET Descricao = '{tarefa.Descricao}', " +
-                $" Ano = {tarefa.Data.Year}, " +
-                $" Mes = {tarefa.Data.Month}, " +
-                $" Dia = {tarefa.Data.Day}, " +
-                $" Hora = 0, " +
-                $" Minuto = 0, " +
-                $" Pontos = {tarefa.Pontos} " +
+                $" Pontos = {tarefa.Pontos}, " +
+                $" Data = '{Helper.ConverterDataSqlite(tarefa.Data)}' " +
                 $" WHERE Id = {tarefa.Id} ";
             var cmd = new SQLiteCommand(query, _con);
             cmd.ExecuteNonQuery();

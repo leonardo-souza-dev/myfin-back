@@ -5,11 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Messages\AdicionarProdutoAoCarrinhoResponse.cs" />
-    <Compile Remove="Messages\IncluirProdutoResponse.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\MyFin.Domain\MyFin.Domain.csproj" />
   </ItemGroup>
 
