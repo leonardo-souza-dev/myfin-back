@@ -6,7 +6,7 @@ namespace MyFin.Domain.Interfaces
 {
     public interface ITarefaService
     {
-        Semana ObterSemana(DateTime primeiroDia);
+        List<Semana> ObterSemanas(DateTime primeiroDia, int qtdSemanas);
         Tarefa Inserir(Tarefa tarefa);
         Tarefa Atualizar(Tarefa tarefa);
     }

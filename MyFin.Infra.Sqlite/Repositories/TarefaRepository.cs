@@ -4,6 +4,7 @@ using MyFin.Domain.Repositories;
 using System.IO;
 using System.Data.SQLite;
 using System;
+using System.Globalization;
 
 namespace MyFin.Infra.Sqlite
 {
@@ -18,12 +19,15 @@ namespace MyFin.Infra.Sqlite
             _con = new SQLiteConnection(cs);            
         }
 
-        public List<Tarefa> ObterTodas(int ano, int mes, int diaInicio, int diaFim)
+        public List<Tarefa> ObterTodas(DateTime diaInicio, DateTime diaFim)
         {
             List<Tarefa> tarefas = new List<Tarefa>();
+            var cultura = CultureInfo.CreateSpecificCulture("pt-BR");
+            var diaInicioSqlite = diaInicio.ToString("s", cultura);
+            var diaFimSqlite = diaFim.ToString("s", cultura);
 
             _con.Open();
-            var query = $"SELECT * FROM TAREFAS WHERE Ano = {ano} AND MES = {mes} AND DIA BETWEEN {diaInicio} AND {diaFim} ";
+            var query = $"SELECT * FROM TAREFAS WHERE Data BETWEEN '{diaInicioSqlite}.000' AND '{diaFimSqlite}.000'";
             var cmd = new SQLiteCommand(query, _con);
             using (SQLiteDataReader rdr = cmd.ExecuteReader())
             {

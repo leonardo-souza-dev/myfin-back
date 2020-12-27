@@ -17,11 +17,12 @@ namespace MyFin.Api.Controllers
             _tarefaService = tarefaService;
         }
 
-        [HttpGet("/obter-semana")]
-        public Semana ObterSemana(DateTime primeiroDia)
+        [HttpGet("/obter-semanas")]
+        public List<Semana> ObterSemanas(DateTime primeiroDia, int qtdSemanas)
         {
-            var semana = _tarefaService.ObterSemana(primeiroDia);
-            return semana;
+            var semanas = _tarefaService.ObterSemanas(primeiroDia, qtdSemanas);
+
+            return semanas;
         }
 
         [HttpPut("/criar")]

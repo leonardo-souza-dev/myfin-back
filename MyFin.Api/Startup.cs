@@ -1,5 +1,4 @@
 using MyFin.Application.Impl;
-using MyFin.Application.Interfaces;
 using MyFin.Domain.Interfaces;
 using MyFin.Domain.Repositories;
 using Microsoft.AspNetCore.Builder;

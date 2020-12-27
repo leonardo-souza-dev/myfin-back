@@ -23,3 +23,7 @@ VALUES
     ('Fazer lição de inglês', 2020, 12, 10, 10, 00), --qui 
     ('Telão',                 2020, 12, 11, 10, 00), --sex
     ('Descansar',             2020, 12, 13, 10, 00)  --outro domingo
+
+
+ALTER TABLE Tarefas
+ADD COLUMN Data text default '2020-12-25 00:00:00.000' 

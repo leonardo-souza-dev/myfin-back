@@ -16,17 +16,31 @@ namespace MyFin.Application.Impl
             _tarefaRepository = tarefaRepository;            
         }
 
-        public Semana ObterSemana(DateTime primeiroDia)
+        public List<Semana> ObterSemanas(DateTime primeiroDia, int qdtSemanas)
         {
-            Semana semana = new Semana();
-            var tarefas = _tarefaRepository.ObterTodas(primeiroDia.Year, primeiroDia.Month, primeiroDia.Day, primeiroDia.Day + 6);
-
-            foreach(var dia in semana.Dias)
+            if (qdtSemanas < 1)
             {
-                dia.AdicionarTarefas(tarefas.Where(x => x.DiaDaSemana == dia.DiaDaSemana).ToList());
+                throw new ArgumentOutOfRangeException(nameof(qdtSemanas));
             }
 
-            return semana;
+            List<Semana> semanas = new List<Semana>();
+            for(var i = 0; i < qdtSemanas; i++)
+            {
+                semanas.Add(new Semana(primeiroDia.AddDays(i * 7)));
+            }
+
+            var tarefas = _tarefaRepository.ObterTodas(primeiroDia, primeiroDia.AddDays(6 + (qdtSemanas - 1) * 7));
+
+            //semanas.ForEach(x => x.Dias.ForEach(dia => dia.AdicionarTarefas(tarefas.Where(t => t.DiaDaSemana == dia.DiaDaSemana).ToList())));
+            foreach(var semana in semanas)
+            {
+                foreach(var dia in semana.Dias)
+                {
+                    dia.AdicionarTarefas(tarefas.Where(x => x.DiaDaSemana == dia.DiaDaSemana && x.Data == dia.Data).ToList());
+                }
+            }
+                        
+            return semanas;
         }
 
         public Tarefa Inserir(Tarefa tarefa)

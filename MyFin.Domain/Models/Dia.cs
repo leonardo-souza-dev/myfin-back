@@ -7,6 +7,7 @@ namespace MyFin.Domain.Models
     {
         public string DiaDaSemana { get; private set; }
         public List<Tarefa> Tarefas { get; private set; } = new List<Tarefa>();
+        public DateTime Data { get; private set; }
 
         public Dia(string diaDaSemana, List<Tarefa> tarefas)
         {
@@ -27,6 +28,11 @@ namespace MyFin.Domain.Models
         public void AdicionarTarefas(List<Tarefa> tarefas)
         {
             this.Tarefas.AddRange(tarefas);
+        }
+
+        public void SetarData(DateTime data)
+        {
+            this.Data = data;
         }
     }
 }
