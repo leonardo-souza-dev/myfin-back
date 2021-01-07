@@ -54,9 +54,22 @@ namespace Utils
             return numero;
         }
 
-        public static string ConverterDataSqlite(DateTime data)
+        public static string ConverterDataSqlite(DateTime? data)
         {
-            return data.ToString("s", CultureInfo.CreateSpecificCulture("pt-BR")).Replace('T', ' ') + ".000";
+            if (data.HasValue)
+                return data.Value.ToString("s", CultureInfo.CreateSpecificCulture("pt-BR")).Replace('T', ' ') + ".000";
+
+            return "";
+        }
+
+        public static byte ConverteBoolSqlite(bool valor)
+        {
+            if (valor)
+            {
+                return 1;
+            }
+
+            return 0;
         }
 
         private static long GetTime(DateTime dia)

@@ -28,13 +28,13 @@ namespace MyFin.Api.Controllers
         [HttpPut("/criar")]
         public Tarefa Criar([FromBody] TarefaRequest request)
         {
-            return _tarefaService.Inserir(new Tarefa(request.Descricao, request.Data, request.Pontos));
+            return _tarefaService.Inserir(request.ToModel());
         }
 
         [HttpPost("/alterar")]
         public Tarefa Alterar([FromBody] TarefaRequest request)
         {
-            return _tarefaService.Atualizar(new Tarefa(request.Id, request.Descricao, request.Data, request.Pontos));
+            return _tarefaService.Atualizar(request.ToModel(request.Id));
         }
     }
 }

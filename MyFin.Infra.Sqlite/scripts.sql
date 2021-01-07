@@ -1,13 +1,22 @@
 ﻿DROP TABLE Tarefas
 
-CREATE TABLE Tarefas (
+CREATE TABLE Tarefas2 (
     Id INTEGER  PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE ,
     Descricao TEXT NOT NULL,
-    Ano INTEGER NOT NULL,
-    Mes INTEGER NOT NULL,
-    Dia INTEGER NOT NULL,
-    Hora INTEGER NOT NULL,
-    Minuto INTEGER NOT NULL
+    Data text NOT NULL,
+    Valor decimal(10, 5) NOT NULL
+);
+
+CREATE TABLE "Tarefas" (
+	"Id"	INTEGER NOT NULL UNIQUE,
+	"Descricao"	TEXT NOT NULL,
+	"Pontos"	INTEGER NOT NULL DEFAULT (0),
+	"Data"	text DEFAULT '1970-01-01 00:00:00.000',
+	"Valor"	decimal(10, 5) ,
+	"Conta"	TEXT,
+	"DataVcto"	text,
+	"DataPgto"	text,
+	PRIMARY KEY("Id" AUTOINCREMENT)
 );
 
 
@@ -27,3 +36,5 @@ VALUES
 
 ALTER TABLE Tarefas
 ADD COLUMN Data text default '2020-12-25 00:00:00.000' 
+ALTER TABLE Tarefas
+ADD COLUMN DataVcto text default '1970-01-01 00:00:00.000' 

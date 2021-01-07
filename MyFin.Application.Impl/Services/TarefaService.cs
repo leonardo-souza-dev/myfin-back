@@ -30,8 +30,6 @@ namespace MyFin.Application.Impl
             }
 
             var tarefas = _tarefaRepository.ObterTodas(primeiroDia, primeiroDia.AddDays(6 + (qdtSemanas - 1) * 7));
-
-            //semanas.ForEach(x => x.Dias.ForEach(dia => dia.AdicionarTarefas(tarefas.Where(t => t.DiaDaSemana == dia.DiaDaSemana).ToList())));
             foreach(var semana in semanas)
             {
                 foreach(var dia in semana.Dias)
@@ -45,7 +43,9 @@ namespace MyFin.Application.Impl
 
         public Tarefa Inserir(Tarefa tarefa)
         {
-            return new Tarefa(_tarefaRepository.Inserir(tarefa), tarefa.Descricao, tarefa.Data, tarefa.Pontos);
+            var id = _tarefaRepository.Inserir(tarefa);
+
+            return new Tarefa(id, tarefa);
         }
 
         public Tarefa Atualizar(Tarefa tarefa)
