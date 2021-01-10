@@ -15,7 +15,7 @@ namespace MyFin.Infra.Sqlite
         public TarefaRepository()
         {
             var pastaAtual = Directory.GetCurrentDirectory();
-            string cs = $"Data Source={pastaAtual}/../../myfin-db/tarefas.db";
+            string cs = $"Data Source={pastaAtual}/../tarefas.db";
             _con = new SQLiteConnection(cs);            
         }
 
@@ -26,7 +26,8 @@ namespace MyFin.Infra.Sqlite
             var diaFimSqlite = Helper.ConverterDataSqlite(diaFim);
 
             _con.Open();
-            var query = $"SELECT * FROM TAREFAS WHERE Data BETWEEN '{diaInicioSqlite}' AND '{diaFimSqlite}'";
+            var query = $" SELECT * FROM TAREFAS " +
+                        $" WHERE Data BETWEEN '{diaInicioSqlite}' AND '{diaFimSqlite}' ";
             var cmd = new SQLiteCommand(query, _con);
             using (SQLiteDataReader rdr = cmd.ExecuteReader())
             {
