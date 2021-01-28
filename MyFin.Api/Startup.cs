@@ -36,6 +36,8 @@ namespace MyFin.Api
             services.AddControllers();
             services.AddTransient<ITarefaService, TarefaService>();
             services.AddScoped<ITarefaRepository, TarefaRepository>();
+            services.AddTransient<IContaService, ContaService>();
+            services.AddScoped<IContaRepository, ContaRepository>();
 
             services.AddSwaggerGen(c => {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MyFin API", Version = "V1" });

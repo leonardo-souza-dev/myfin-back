@@ -12,7 +12,7 @@ namespace MyFin.Application.Messages
         public object PontosRealizados { get; set; }
 
         public decimal? Valor { get; set; }
-        public string Conta { get; set; }
+        public ContaRequest Conta { get; set; }
         public DateTime? DataVcto { get; set; }
         public DateTime? DataPgto { get; set; }
 
@@ -28,7 +28,7 @@ namespace MyFin.Application.Messages
                                   this.PontosPrevistos,
                                   this.PontosRealizados,
                                   this.Valor,
-                                  this.Conta,
+                                  this.Conta?.ToModel(),
                                   this.DataVcto,
                                   this.DataPgto,
                                   this.Concluido);
@@ -39,7 +39,7 @@ namespace MyFin.Application.Messages
                               this.PontosPrevistos,
                               this.PontosRealizados,
                               this.Valor,
-                              this.Conta,
+                              this.Conta?.ToModel(),
                               this.DataVcto,
                               this.DataPgto,
                               this.Concluido);            

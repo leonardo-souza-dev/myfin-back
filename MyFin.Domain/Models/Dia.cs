@@ -8,6 +8,7 @@ namespace MyFin.Domain.Models
         public string DiaDaSemana { get; private set; }
         public List<Tarefa> Tarefas { get; private set; } = new List<Tarefa>();
         public DateTime Data { get; private set; }
+        public List<Saldo> Saldos { get; set; }
 
         public Dia(string diaDaSemana, List<Tarefa> tarefas)
         {

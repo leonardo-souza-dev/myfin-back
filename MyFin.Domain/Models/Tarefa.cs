@@ -10,7 +10,7 @@ namespace MyFin.Domain.Models
         public int PontosPrevistos { get; private set; }
         public DateTime Data { get; private set; }
         public decimal? Valor { get; private set; }
-        public string Conta { get; private set; }
+        public Conta Conta { get; private set; }
         public DateTime? DataVcto { get; private set; }
         public DateTime? DataPgto { get; private set; }
         public int PontosRealizados { get; private set; }
@@ -20,7 +20,26 @@ namespace MyFin.Domain.Models
         {
             get
             {
-                return Helper.RetonarDiaDaSemana(Data);                
+                return Helper.RetonarDiaDaSemana(Data);
+            }
+        }
+
+        public ETipo Tipo
+        {
+            get
+            {
+                if (this.Valor.HasValue &&
+                    this.Valor.Value > 0 &&
+                    this.Conta != null &&
+                    this.DataVcto.HasValue)
+                {
+                    return ETipo.Transacao;
+                }
+                else
+                {
+                    return ETipo.Afazer;
+                }
+
             }
         }
 
@@ -45,7 +64,7 @@ namespace MyFin.Domain.Models
                       object pontosPrevistos,
                       object pontosRealizados,
                       decimal? valor,
-                      string conta,
+                      Conta conta,
                       DateTime? dataVcto,
                       DateTime? dataPgto,
                       bool concluido)
@@ -59,7 +78,7 @@ namespace MyFin.Domain.Models
                       object pontosPrevistos,
                       object pontosRealizados,
                       decimal? valor,
-                      string conta,
+                      Conta conta,
                       DateTime? dataVcto,
                       DateTime? dataPgto,
                       bool concluido)

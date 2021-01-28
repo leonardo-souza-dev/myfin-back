@@ -26,7 +26,21 @@ namespace MyFin.Infra.Sqlite
             var diaFimSqlite = Helper.ConverterDataSqlite(diaFim);
 
             _con.Open();
-            var query = $" SELECT * FROM TAREFAS " +
+            var query = $" SELECT T.Id, " +
+                        $"        T.Descricao, " +
+                        $"        T.PontosPrevistos, " +
+                        $"        T.Data, " +
+                        $"        T.Valor, " +
+                        $"        T.DataVcto, " +
+                        $"        T.DataPgto, " +
+                        $"        T.PontosRealizados, " +
+                        $"        T.Concluido, " +
+                        $"        T.Anotacoes, " +
+                        $"        T.ContaId, " +
+                        $"        C.Nome, " +
+                        $"        C.SaldoInicial " +
+                        $" FROM TAREFAS T " +
+                         " LEFT JOIN CONTAS C ON T.ContaId = C.Id " +
                         $" WHERE Data BETWEEN '{diaInicioSqlite}' AND '{diaFimSqlite}' ";
             var cmd = new SQLiteCommand(query, _con);
             using (SQLiteDataReader rdr = cmd.ExecuteReader())
@@ -40,25 +54,37 @@ namespace MyFin.Infra.Sqlite
 
                     var valorRead = rdr.GetValue(4);
                     var valorReadDecimal = Convert.ToDecimal(valorRead);
-                    var contaRead = rdr.GetValue(5);
-                    var contaReadString = Convert.ToString(contaRead);
 
-                    var dataVctoRead = rdr.GetString(6);
+                    var dataVctoRead = rdr.GetString(5);
                     DateTime? dataVctoReadDateTime = null;
                     if (dataVctoRead != "")
                     {
                         dataVctoReadDateTime = Convert.ToDateTime(dataVctoRead);
                     }
 
-                    var dataPgtoRead = rdr.GetString(7);
+                    var dataPgtoRead = rdr.GetString(6);
                     DateTime? dataPgtoReadDateTime = null;
                     if (dataPgtoRead != "")
                     {
                         dataPgtoReadDateTime = Convert.ToDateTime(dataPgtoRead);
                     }
 
-                    var pontosRealizadosRead = rdr.GetInt32(8);
-                    var concluidoRead = rdr.GetBoolean(9);
+                    var pontosRealizadosRead = rdr.GetInt32(7);
+                    var concluidoRead = rdr.GetBoolean(8);
+                    var anotacoesRead = rdr.GetValue(9);
+
+                    Conta conta = null;
+
+                    if (!rdr.IsDBNull(10))
+                    {
+                        var contaIdRead = rdr.GetInt32(10);
+                        var contaNomeRead = rdr.GetString(11);
+                        var contaSaldoInicialRead = rdr.GetDecimal(12);
+
+                        conta = new Conta(contaIdRead, 
+                                          contaNomeRead, 
+                                          contaSaldoInicialRead);
+                    }                   
 
                     Tarefa tarefa = new Tarefa(id,
                                                descricao,
@@ -66,7 +92,7 @@ namespace MyFin.Infra.Sqlite
                                                pontosPrevistosRead,
                                                pontosRealizadosRead,
                                                valorReadDecimal,
-                                               contaReadString,
+                                               conta,
                                                dataVctoReadDateTime,
                                                dataPgtoReadDateTime,
                                                concluidoRead);
@@ -95,12 +121,18 @@ namespace MyFin.Infra.Sqlite
                 queryValor = "''";
             }
 
+            string contaId = "NULL";
+            if (tarefa.Conta != null)
+            {
+                contaId = tarefa.Conta.Id.ToString();
+            }
+
             var query = $" INSERT OR REPLACE INTO Tarefas (" +
                         $"Descricao                                       , " +
                         $"PontosPrevistos                                 , " +
                         $"Data                                            , " +
                         $"Valor                                           , " +
-                        $"Conta                                           , " +
+                        $"ContaId                                         , " +
                         $"DataVcto                                        , " +
                         $"DataPgto                                        , " +
                         $"PontosRealizados                                , " +
@@ -110,14 +142,14 @@ namespace MyFin.Infra.Sqlite
                         $" {tarefa.PontosPrevistos}                       , " +
                         $"'{data}'                                        , " +
                         $" {queryValor}                                   , " +
-                        $"'{tarefa.Conta}'                                , " +
+                        $" {contaId}                                      , " +
                         $"'{tarefa.DataVcto}'                             , " +
                         $"'{tarefa.DataPgto}'                             ,  " +
                         $"'{tarefa.PontosRealizados}'                     ,  " +
                         $"'{Helper.ConverteBoolSqlite(tarefa.Concluido)}'    " +
                         $") ";
             var cmd = new SQLiteCommand(query, _con);
-            cmd.ExecuteNonQuery();
+                    cmd.ExecuteNonQuery();
 
             cmd.CommandText = "SELECT last_insert_rowid() ";
 
@@ -138,11 +170,18 @@ namespace MyFin.Infra.Sqlite
                 valor = tarefa.Valor.ToString();
             }
 
+            string contaId = "NULL";
+            if (tarefa.Conta != null)
+            {
+                contaId = tarefa.Conta.Id.ToString();
+            }
+
+
             var query = $"UPDATE Tarefas SET Descricao = '{tarefa.Descricao}'  , " +
                 $" PontosPrevistos = {tarefa.PontosPrevistos}                  , " +
                 $" Data = '{Helper.ConverterDataSqlite(tarefa.Data)}'          , " +
                 $" Valor = '{valor}'                                           , " +
-                $" Conta = '{tarefa.Conta}'                                    , " +
+                $" ContaId = {contaId}                                         , " +
                 $" DataVcto = '{Helper.ConverterDataSqlite(tarefa.DataVcto)}'  , " +
                 $" DataPgto = '{Helper.ConverterDataSqlite(tarefa.DataPgto)}'  , " +
                 $" PontosRealizados = '{tarefa.PontosRealizados}'              , " +
