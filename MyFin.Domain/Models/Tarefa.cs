@@ -15,7 +15,6 @@ namespace MyFin.Domain.Models
         public DateTime? DataPgto { get; private set; }
         public int PontosRealizados { get; private set; }
         public bool Concluido { get; private set; }
-
         public string DiaDaSemana
         {
             get

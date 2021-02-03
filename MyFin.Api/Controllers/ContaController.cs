@@ -1,4 +1,5 @@
-﻿using MyFin.Application.Messages;
+﻿using MyFin.Application.Requests;
+using MyFin.Application.Responses;
 using MyFin.Domain.Interfaces;
 using MyFin.Domain.Models;
 using Microsoft.AspNetCore.Mvc;

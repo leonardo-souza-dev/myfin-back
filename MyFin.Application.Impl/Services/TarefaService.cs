@@ -4,6 +4,7 @@ using System.Linq;
 using System;
 using System.Collections.Generic;
 using MyFin.Domain.Repositories;
+using MyFin.Application.Responses;
 
 namespace MyFin.Application.Impl
 {
@@ -16,7 +17,7 @@ namespace MyFin.Application.Impl
             _tarefaRepository = tarefaRepository;            
         }
 
-        public List<Semana> ObterSemanas(DateTime primeiroDia, int qdtSemanas)
+        public List<SemanaResponse> ObterSemanas(DateTime primeiroDia, int qdtSemanas)
         {
             if (qdtSemanas < 1)
             {
@@ -37,8 +38,11 @@ namespace MyFin.Application.Impl
                     dia.AdicionarTarefas(tarefas.Where(x => x.DiaDaSemana == dia.DiaDaSemana && x.Data == dia.Data).ToList());
                 }
             }
-                        
-            return semanas;
+            
+            var semanasResponse = new List<SemanaResponse>();
+            semanas.ForEach(x => semanasResponse.Add(new SemanaResponse(x)));
+            
+            return semanasResponse;
         }
 
         public Tarefa Inserir(Tarefa tarefa)

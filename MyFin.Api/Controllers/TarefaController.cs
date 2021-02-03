@@ -1,4 +1,5 @@
-﻿using MyFin.Application.Messages;
+﻿using MyFin.Application.Requests;
+using MyFin.Application.Responses;
 using MyFin.Domain.Interfaces;
 using MyFin.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -18,11 +19,11 @@ namespace MyFin.Api.Controllers
         }
 
         [HttpGet("/obter-semanas")]
-        public List<Semana> ObterSemanas(DateTime primeiroDia, int qtdSemanas)
+        public List<SemanaResponse> ObterSemanas(DateTime primeiroDia, int qtdSemanas)
         {
-            var semanas = _tarefaService.ObterSemanas(primeiroDia, qtdSemanas);
+            var semanasResponse = _tarefaService.ObterSemanas(primeiroDia, qtdSemanas);
 
-            return semanas;
+            return semanasResponse;
         }
 
         [HttpPut("/criar")]

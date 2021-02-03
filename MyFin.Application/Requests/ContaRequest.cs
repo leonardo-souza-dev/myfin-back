@@ -1,7 +1,7 @@
 ﻿using System;
 using MyFin.Domain.Models;
 
-namespace MyFin.Application.Messages
+namespace MyFin.Application.Requests
 {
     public class ContaRequest
     {
