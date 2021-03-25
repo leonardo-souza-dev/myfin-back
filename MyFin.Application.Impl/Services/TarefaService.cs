@@ -40,7 +40,7 @@ namespace MyFin.Application.Impl
             }
             
             var semanasResponse = new List<SemanaResponse>();
-            semanas.ForEach(x => semanasResponse.Add(new SemanaResponse(x)));
+            semanas.ForEach(semana => semanasResponse.Add(new SemanaResponse(semana)));
             
             return semanasResponse;
         }

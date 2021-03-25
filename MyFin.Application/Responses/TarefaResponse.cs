@@ -18,6 +18,7 @@ namespace MyFin.Application.Responses
         public int PontosRealizados { get; set; }
         public bool Concluido { get; set; }
         public string DiaDaSemana { get; set; }
+        public string Tipo { get; set; }
 
         public TarefaResponse(Tarefa tarefa)
         {
@@ -37,6 +38,7 @@ namespace MyFin.Application.Responses
             this.PontosPrevistos = tarefa.PontosPrevistos;
             this.Concluido = tarefa.Concluido;
             this.DiaDaSemana = tarefa.DiaDaSemana;
+            this.Tipo = tarefa.Tipo.ToString();
         }
     }
 }

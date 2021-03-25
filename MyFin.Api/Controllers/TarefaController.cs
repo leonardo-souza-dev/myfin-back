@@ -27,15 +27,15 @@ namespace MyFin.Api.Controllers
         }
 
         [HttpPut("/criar")]
-        public Tarefa Criar([FromBody] TarefaRequest request)
+        public TarefaResponse Criar([FromBody] TarefaRequest request)
         {
-            return _tarefaService.Inserir(request.ToModel());
+            return new TarefaResponse(_tarefaService.Inserir(request.ToModel()));
         }
 
         [HttpPost("/alterar")]
-        public Tarefa Alterar([FromBody] TarefaRequest request)
+        public TarefaResponse Alterar([FromBody] TarefaRequest request)
         {
-            return _tarefaService.Atualizar(request.ToModel(request.Id));
+            return new TarefaResponse(_tarefaService.Atualizar(request.ToModel(request.Id)));
         }
     }
 }
