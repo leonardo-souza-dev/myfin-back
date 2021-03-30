@@ -21,4 +21,9 @@
   </ItemGroup>
 
 
+  <ItemGroup>
+    <None Update="tarefas.db">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>
