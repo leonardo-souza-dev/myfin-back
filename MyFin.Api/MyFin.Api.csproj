@@ -22,7 +22,7 @@
 
 
   <ItemGroup>
-    <None Update="tarefas.db">
+    <None Update="./db/tarefas.db">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

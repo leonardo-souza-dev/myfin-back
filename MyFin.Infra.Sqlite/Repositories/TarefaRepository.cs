@@ -15,7 +15,7 @@ namespace MyFin.Infra.Sqlite
         public TarefaRepository()
         {
             var pastaAtual = Directory.GetCurrentDirectory();
-            string cs = $"Data Source={pastaAtual}/tarefas.db";
+            string cs = $"Data Source={pastaAtual}/db/tarefas.db";
             _con = new SQLiteConnection(cs);            
         }
 
