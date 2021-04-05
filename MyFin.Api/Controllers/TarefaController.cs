@@ -37,5 +37,13 @@ namespace MyFin.Api.Controllers
         {
             return new TarefaResponse(_tarefaService.Atualizar(request.ToModel(request.Id)));
         }
+
+        [HttpGet("/obter-transacoes-mes")]
+        public List<TarefaResponse> ObterTransacoesMes(int mes)
+        {
+            var tarefasResponse = _tarefaService.ObterTransacoesMes(mes);
+
+            return tarefasResponse;
+        }
     }
 }

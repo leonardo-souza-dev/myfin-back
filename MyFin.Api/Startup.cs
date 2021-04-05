@@ -29,7 +29,7 @@ namespace MyFin.Api
                 options.AddDefaultPolicy(
                     builder =>
                     {
-                        builder.WithOrigins("http://localhost:8080").AllowAnyMethod().AllowAnyHeader();
+                        builder.WithOrigins("http://localhost:8654").AllowAnyMethod().AllowAnyHeader();
                     });
             });
 

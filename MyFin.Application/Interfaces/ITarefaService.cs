@@ -10,5 +10,7 @@ namespace MyFin.Domain.Interfaces
         List<SemanaResponse> ObterSemanas(DateTime primeiroDia, int qtdSemanas);
         Tarefa Inserir(Tarefa tarefa);
         Tarefa Atualizar(Tarefa tarefa);
+        List<TarefaResponse> ObterTarefasMes(int mes);
+        List<TarefaResponse> ObterTransacoesMes(int mes);
     }
 }

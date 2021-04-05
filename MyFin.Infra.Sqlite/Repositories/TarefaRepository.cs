@@ -41,69 +41,76 @@ namespace MyFin.Infra.Sqlite
                         $"        C.SaldoInicial " +
                         $" FROM TAREFAS T " +
                          " LEFT JOIN CONTAS C ON T.ContaId = C.Id " +
-                        $" WHERE Data BETWEEN '{diaInicioSqlite}' AND '{diaFimSqlite}' ";
+                        $" WHERE Data BETWEEN '{diaInicioSqlite}' AND '{diaFimSqlite}' ORDER BY T.Id";
             var cmd = new SQLiteCommand(query, _con);
+
+    var tempCOntador = 0;
+
             using (SQLiteDataReader rdr = cmd.ExecuteReader())
             {
                 while (rdr.Read())
                 {
-                    var id = rdr.GetInt32(0);
-                    var descricao = rdr.GetString(1);
-                    var pontosPrevistosRead = rdr.GetInt32(2);
-                    var dataRead = rdr.GetDateTime(3);
-
-                    var valorRead = rdr.GetValue(4);
-                    var valorReadDecimal = Convert.ToDecimal(valorRead);
-
-                    var dataVctoRead = rdr.GetString(5);
-                    DateTime? dataVctoReadDateTime = null;
-                    if (dataVctoRead != "")
-                    {
-                        dataVctoReadDateTime = Convert.ToDateTime(dataVctoRead);
-                    }
-
-                    var dataPgtoRead = rdr.GetString(6);
-                    DateTime? dataPgtoReadDateTime = null;
-                    if (dataPgtoRead != "")
-                    {
-                        dataPgtoReadDateTime = Convert.ToDateTime(dataPgtoRead);
-                    }
-
-                    var pontosRealizadosRead = rdr.GetInt32(7);
-                    var concluidoRead = rdr.GetBoolean(8);
-                    var anotacoesRead = rdr.GetValue(9);
-
-                    Conta conta = null;
-
-                    if (!rdr.IsDBNull(10))
-                    {
-                        var contaIdRead = rdr.GetInt32(10);
-                        var contaNomeRead = rdr.GetString(11);
-                        var contaSaldoInicialRead = rdr.GetDecimal(12);
-
-                        conta = new Conta(contaIdRead, 
-                                          contaNomeRead, 
-                                          contaSaldoInicialRead);
-                    }                   
-
-                    Tarefa tarefa = new Tarefa(id,
-                                               descricao,
-                                               dataRead,
-                                               pontosPrevistosRead,
-                                               pontosRealizadosRead,
-                                               valorReadDecimal,
-                                               conta,
-                                               dataVctoReadDateTime,
-                                               dataPgtoReadDateTime,
-                                               concluidoRead);
+                    Tarefa tarefa = Map(rdr);
 
                     tarefas.Add(tarefa);
+                    tempCOntador++;
                 }
             }
 
             _con.Close();
 
             return tarefas;
+        }
+
+        private Tarefa Map(SQLiteDataReader rdr)
+        {
+            var id = rdr.GetInt32(0);
+            var descricao = rdr.GetString(1);
+            var pontosPrevistosRead = rdr.GetInt32(2);
+            var dataRead = rdr.GetDateTime(3);
+
+            var valorRead = rdr.GetValue(4);
+            var valorReadDecimal = Convert.ToDecimal(valorRead);
+
+            var dataVctoReadDateTime = ConverterData(rdr.GetString(5));                    
+            var dataPgtoReadDateTime = ConverterData(rdr.GetString(6));                    
+            var pontosRealizadosRead = rdr.GetInt32(7);
+            var concluidoRead = rdr.GetBoolean(8);
+            var anotacoesRead = rdr.GetValue(9);
+
+            Conta conta = null;
+
+            if (!rdr.IsDBNull(10))
+            {
+                var contaIdRead = rdr.GetInt32(10);
+                var contaNomeRead = rdr.GetString(11);
+                var contaSaldoInicialRead = rdr.GetDecimal(12);
+
+                conta = new Conta(contaIdRead, 
+                                  contaNomeRead, 
+                                  contaSaldoInicialRead);
+            }                   
+
+            return new Tarefa(id,
+                                        descricao,
+                                        dataRead,
+                                        pontosPrevistosRead,
+                                        pontosRealizadosRead,
+                                        valorReadDecimal,
+                                        conta,
+                                        dataVctoReadDateTime,
+                                        dataPgtoReadDateTime,
+                                        concluidoRead);
+        }
+
+        private DateTime? ConverterData(string dataDb)
+        {
+            if (dataDb != "")
+            {
+                return Convert.ToDateTime(dataDb);
+            }
+
+            return null;
         }
 
         public int Inserir(Tarefa tarefa)

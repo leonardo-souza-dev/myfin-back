@@ -56,5 +56,25 @@ namespace MyFin.Application.Impl
         {
             return _tarefaRepository.Atualizar(tarefa);
         }
+
+        public List<TarefaResponse> ObterTarefasMes(int mes)
+        {
+            var tarefas = _tarefaRepository.ObterTodas(new DateTime(2021, mes, 1), new DateTime(2021, mes + 1, 1).AddDays(-1));
+
+            var tarefasResponse = tarefas.Select(tarefa => new TarefaResponse(tarefa)).ToList();
+
+            return tarefasResponse.OrderBy(x => x.Data).ToList();
+        }
+
+        public List<TarefaResponse> ObterTransacoesMes(int mes)
+        {
+            var tarefas = _tarefaRepository.ObterTodas(new DateTime(2021, mes, 1), new DateTime(2021, mes + 1, 1).AddDays(-1));
+            var transacoesResponse = tarefas
+                                        .Where(x => x.Conta != null)
+                                        .Select(tarefa => new TarefaResponse(tarefa))
+                                        .ToList();
+
+            return transacoesResponse;
+        }
     }
 }
